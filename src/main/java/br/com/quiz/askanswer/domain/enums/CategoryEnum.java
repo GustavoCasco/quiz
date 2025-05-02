@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum CategoryEnum {
 
-    BIRTH_DAY("Data Nascimento");
+    BIRTH_DAY("Data Nascimento"), BIRTH_LOCAL("Local Nascimento"), NAME("Nome");
 
     private final String category;
 

@@ -6,16 +6,11 @@ public class UserDomain {
     private String userName;
     private LocalDate birthDate;
     private String homeTown;
-    private QuizGenerateDomain quizGenerateDomain;
-    private AskDomain askDomain;
 
-    public UserDomain(String userName, LocalDate birthDate, String homeTown, QuizGenerateDomain quizGenerateDomain,
-                      AskDomain askDomain) {
+    public UserDomain(String userName, LocalDate birthDate, String homeTown) {
         this.userName = userName;
         this.birthDate = birthDate;
         this.homeTown = homeTown;
-        this.quizGenerateDomain = quizGenerateDomain;
-        this.askDomain = askDomain;
     }
 
     public UserDomain() {
@@ -43,21 +38,5 @@ public class UserDomain {
 
     public void setHomeTown(String homeTown) {
         this.homeTown = homeTown;
-    }
-
-    public QuizGenerateDomain getQuizGenerateDomain() {
-        return quizGenerateDomain;
-    }
-
-    public void setQuizGenerateDomain(QuizGenerateDomain quizGenerateDomain) {
-        this.quizGenerateDomain = quizGenerateDomain;
-    }
-
-    public AskDomain getAskDomain() {
-        return askDomain;
-    }
-
-    public void setAskDomain(AskDomain askDomain) {
-        this.askDomain = askDomain;
     }
 }

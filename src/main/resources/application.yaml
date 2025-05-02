@@ -3,7 +3,7 @@ spring:
     name: askanswer
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 aws:
   secrets:
     dtbase-user: secret-db-user
