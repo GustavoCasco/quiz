@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: askanswer
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+aws:
+  secrets:
+    dtbase-user: secret-db-user
+    dtbase-pwd: secret-db-pwd
