@@ -9,9 +9,7 @@ import br.com.quiz.askanswer.domain.model.UserDomain;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -26,7 +24,6 @@ public class GeneratedQuizUC {
         askDomain.setCategory(askDTO.getCategory());
         askDomain.setEnunciated(askDTO.getEnunciated());
         generatedQuiz.saveAsk(askDomain);
-        createQuiz();
     }
 
     public void SaveUser(CreateUserDTO userDTO) {
@@ -38,20 +35,21 @@ public class GeneratedQuizUC {
         generatedQuiz.SaveUser(userDomain);
     }
 
-    public void createQuiz() {
+    public List<QuizGenerateDomain> createQuiz(String idUser) {
         AtomicInteger sequenceAllQuizByUser = new AtomicInteger(0);
-        UserDomain userDomain =  generatedQuiz.getUser(UUID.fromString("41a74115-cf10-4e8c-9b9e-74597a73fa48"));
+        var uuidUser = UUID.fromString(idUser);
+        UserDomain userDomain =  generatedQuiz.getUser(uuidUser);
         List<QuizGenerateDomain> listQuizGenerateDomain = new ArrayList<>();
         List<String> allCategory = generatedQuiz.getCategory();
 
         var hasQuizByUser = generatedQuiz.
-                existsQuizByUser(UUID.fromString("41a74115-cf10-4e8c-9b9e-74597a73fa48"));
+                existsQuizByUser(uuidUser);
 
         if(hasQuizByUser){
-            sequenceAllQuizByUser.set(generatedQuiz.findByUserEntities(UUID.fromString("41a74115-cf10-4e8c-9b9e-74597a73fa48"))
+            sequenceAllQuizByUser.set(generatedQuiz.findByUserEntities(uuidUser)
                     .getFirst().getQuantityQuizGenerated());
 
-            if (sequenceAllQuizByUser.get() > 3) {
+            if (sequenceAllQuizByUser.get() >= 3) {
                 throw new RuntimeException("Usuario Bloqueado, reset seu usuario para gerar perguntas novas");
             }
 
@@ -65,20 +63,45 @@ public class GeneratedQuizUC {
             for (int i = 0; i < 1; i++) {
                 AskDomain askDomain = generatedQuiz.getAsk(x);
                 quizGenerateDomain.setAsk(askDomain.getEnunciated());
+                quizGenerateDomain.getAskEntities().setIdAsk(askDomain.getIdAsk());
             }
             quizGenerateDomain.setQuantityQuizGenerated(sequenceAllQuizByUser.get());
+
+            var answerCorrect = getAnswerCorrect(userDomain, x);
+            var listAllAnswers = generatedQuiz.findByAnswerRandoms(x, answerCorrect.substring(0,1));
+
+            listAllAnswers.add(answerCorrect);
+            Collections.shuffle(listAllAnswers);
+            quizGenerateDomain.setAllAnswers(listAllAnswers);
+            quizGenerateDomain.setQuantityQuizGenerated(sequenceAllQuizByUser.get());
+            quizGenerateDomain.setPositionCorrectAnswer(getAPositionAnswerCorrect(listAllAnswers, answerCorrect));
+            quizGenerateDomain.getUserEntities().setIdUser(uuidUser);
             listQuizGenerateDomain.add(quizGenerateDomain);
         });
 
+        listQuizGenerateDomain.forEach(x -> {
+            generatedQuiz.saveQuiz(x);
+        });
+
+        return listQuizGenerateDomain;
     }
 
     private String getAnswerCorrect(UserDomain userDomain, String category){
         return switch (category){
             case "Local Nascimento" -> userDomain.getHomeTown();
             case "Data Nascimento" -> userDomain.getBirthDate().toString();
-            case "Nome"  -> userDomain.getUserName();
+            case "NOME"  -> userDomain.getUserName();
 
             default -> throw new IllegalStateException("Unexpected value: " + category);
         };
+    }
+
+    private int getAPositionAnswerCorrect(List<String> allAnswer, String answerCorrect){
+        for (int i = 0; i <= 4; i++) {
+            if (Objects.equals(allAnswer.get(i), answerCorrect)){
+                return i;
+            }
+        }
+        throw new RuntimeException("Nao encontrado a resposta correta");
     }
 }

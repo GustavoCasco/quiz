@@ -4,6 +4,7 @@ import br.com.quiz.askanswer.domain.enums.CategoryEnum;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -19,11 +20,10 @@ public class AskEntities implements Serializable {
     @Column(name = "categoria")
     private CategoryEnum categoryEnum;
 
-    @OneToOne(mappedBy = "askEntities")
-    private QuizEntities quizEntities;
+    @OneToMany(mappedBy = "askEntities")
+    private List<QuizEntities> quizEntities;
 
-
-    public AskEntities(UUID idAsk, String enunciated, CategoryEnum categoryEnum, QuizEntities quizEntities) {
+    public AskEntities(UUID idAsk, String enunciated, CategoryEnum categoryEnum, List<QuizEntities> quizEntities) {
         this.idAsk = idAsk;
         this.enunciated = enunciated;
         this.categoryEnum = categoryEnum;
@@ -58,11 +58,11 @@ public class AskEntities implements Serializable {
         this.categoryEnum = categoryEnum;
     }
 
-    public QuizEntities getQuizEntities() {
+    public List<QuizEntities> getQuizEntities() {
         return quizEntities;
     }
 
-    public void setQuizEntities(QuizEntities quizEntities) {
+    public void setQuizEntities(List<QuizEntities> quizEntities) {
         this.quizEntities = quizEntities;
     }
 }

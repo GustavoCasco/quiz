@@ -2,21 +2,25 @@ package br.com.quiz.askanswer.domain.model;
 
 import br.com.quiz.askanswer.adapters.out.persistence.entities.AskEntities;
 import br.com.quiz.askanswer.adapters.out.persistence.entities.UserEntities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.util.List;
 
 public class QuizGenerateDomain {
 
-    private String allAnswers;
     private String ask;
+    private List<String> allAnswers;
     private int quantityQuizGenerated;
     private int positionCorrectAnswer;
-    private UserEntities userEntities;
-    private AskEntities askEntities;
+    @JsonIgnore
+    private UserEntities userEntities = new UserEntities();
+    @JsonIgnore
+    private AskEntities askEntities = new AskEntities();
 
     public QuizGenerateDomain() {
     }
 
-    public QuizGenerateDomain(String allAnswers, String ask, int quantityQuizGenerated, int positionCorrectAnswer,
-                              UserEntities userEntities, AskEntities askEntities) {
+    public QuizGenerateDomain(List<String> allAnswers, String ask, int quantityQuizGenerated, int positionCorrectAnswer, UserEntities userEntities, AskEntities askEntities) {
         this.allAnswers = allAnswers;
         this.ask = ask;
         this.quantityQuizGenerated = quantityQuizGenerated;
@@ -25,11 +29,11 @@ public class QuizGenerateDomain {
         this.askEntities = askEntities;
     }
 
-    public String getAllAnswers() {
+    public List<String> getAllAnswers() {
         return allAnswers;
     }
 
-    public void setAllAnswers(String allAnswers) {
+    public void setAllAnswers(List<String> allAnswers) {
         this.allAnswers = allAnswers;
     }
 

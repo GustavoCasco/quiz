@@ -1,5 +1,6 @@
 package br.com.quiz.askanswer.adapters.out.persistence.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -16,13 +17,15 @@ public class QuizEntities implements Serializable {
     private String allAnswers;
     private int positionCorrectAnswer;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "idAsk")
-    private AskEntities askEntities;
+    @JsonIgnore
+    private AskEntities askEntities = new AskEntities();
 
-    @OneToOne
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "id_user")
-    private UserEntities userEntities;
+    private UserEntities userEntities = new UserEntities();
 
     public QuizEntities(UUID idQuiz, int quantityQuizGenerated, String allAnswers, int positionCorrectAnswer, AskEntities askEntities, UserEntities userEntities) {
         this.idQuiz = idQuiz;

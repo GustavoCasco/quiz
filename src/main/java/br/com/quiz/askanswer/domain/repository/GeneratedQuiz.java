@@ -2,6 +2,7 @@ package br.com.quiz.askanswer.domain.repository;
 
 import br.com.quiz.askanswer.adapters.out.persistence.entities.QuizEntities;
 import br.com.quiz.askanswer.domain.model.AskDomain;
+import br.com.quiz.askanswer.domain.model.QuizGenerateDomain;
 import br.com.quiz.askanswer.domain.model.UserDomain;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public interface GeneratedQuiz {
     List<String> getCategory();
     Boolean existsQuizByUser(UUID idUser);
     List<QuizEntities> findByUserEntities(UUID idUser);
-    void createQuiz();
+    List<String> findByAnswerRandoms(String category, String initialAnswer);
+    void saveQuiz(QuizGenerateDomain quizGenerateDomain);
 
 }

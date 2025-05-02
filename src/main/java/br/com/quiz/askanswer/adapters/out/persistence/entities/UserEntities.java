@@ -1,12 +1,10 @@
 package br.com.quiz.askanswer.adapters.out.persistence.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -19,10 +17,10 @@ public class UserEntities implements Serializable  {
     private LocalDate birthDate;
     private String homeTown;
 
-    @OneToOne(mappedBy = "userEntities")
-    private QuizEntities quizEntities;
+    @OneToMany(mappedBy = "userEntities")
+    private List<QuizEntities> quizEntities;
 
-    public UserEntities(UUID idUser, String userName, LocalDate birthDate, String homeTown, QuizEntities quizEntities) {
+    public UserEntities(UUID idUser, String userName, LocalDate birthDate, String homeTown, List<QuizEntities> quizEntities) {
         this.idUser = idUser;
         this.userName = userName;
         this.birthDate = birthDate;
@@ -66,11 +64,11 @@ public class UserEntities implements Serializable  {
         this.homeTown = homeTown;
     }
 
-    public QuizEntities getQuizEntities() {
+    public List<QuizEntities> getQuizEntities() {
         return quizEntities;
     }
 
-    public void setQuizEntities(QuizEntities quizEntities) {
+    public void setQuizEntities(List<QuizEntities> quizEntities) {
         this.quizEntities = quizEntities;
     }
 }
